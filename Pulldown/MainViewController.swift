@@ -20,7 +20,7 @@ class MainViewController: UIViewController, UIPopoverPresentationControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        container.hidden = true
+        container.isHidden = true
         self.container.alpha = 0
         self.containerTopConstraint.constant = -200
         
@@ -31,24 +31,21 @@ class MainViewController: UIViewController, UIPopoverPresentationControllerDeleg
                 
     }
     
-    override func layoutSublayersOfLayer(layer: CALayer) {
-        self.selectedMenuItem.alignImageRight()
-    }
 
     //MARK - open and closing methods
   
-    @IBAction func buttonPressed(sender: AnyObject) {
+    @IBAction func buttonPressed(_ sender: AnyObject) {
         
-        container.hidden ? openPullDown() : closePullDown()
+        container.isHidden ? openPullDown() : closePullDown()
         
     }
     
     
     func openPullDown()
     {
-        self.container.hidden = false
+        self.container.isHidden = false
         
-        UIView.animateWithDuration(0.4,
+        UIView.animate(withDuration: 0.4,
             delay: 0,
             usingSpringWithDamping: 0.7,
             initialSpringVelocity: 0.5,
@@ -56,7 +53,7 @@ class MainViewController: UIViewController, UIPopoverPresentationControllerDeleg
             animations: {
                 self.containerTopConstraint.constant = 0
                 self.container.alpha = 1
-                self.selectedMenuItem.imageView?.transform = CGAffineTransformMakeRotation( 180 * CGFloat(M_PI/180))
+                self.selectedMenuItem.imageView?.transform = CGAffineTransform( rotationAngle: 180 * CGFloat(Double.pi/180))
                 self.view.layoutIfNeeded()
             },
             completion: { finished in
@@ -67,16 +64,16 @@ class MainViewController: UIViewController, UIPopoverPresentationControllerDeleg
     
     func closePullDown()
     {
-        UIView.animateWithDuration(0.3,
+        UIView.animate(withDuration: 0.3,
             animations: {
                 self.container.alpha = 0
                 self.containerTopConstraint.constant = -200
                 self.selectedMenuItem.alignImageRight()
-                self.selectedMenuItem.imageView?.transform = CGAffineTransformMakeRotation(-1 * CGFloat(M_PI/180))
+                self.selectedMenuItem.imageView?.transform = CGAffineTransform(rotationAngle: -1 * CGFloat(Double.pi/180))
                 self.view.layoutIfNeeded()
             },
             completion: { finished in
-                self.container.hidden = true
+                self.container.isHidden = true
             }
         )
     }
@@ -86,9 +83,9 @@ class MainViewController: UIViewController, UIPopoverPresentationControllerDeleg
 extension MainViewController : PullDownDelegate {
     
     
-    func selectedMenuDidUpdate(name: String) {
+    func selectedMenuDidUpdate(_ name: String) {
 
-        selectedMenuItem.setTitle(name.uppercaseString, forState: .Normal)
+        selectedMenuItem.setTitle(name.uppercased(), for: UIControlState())
         
         closePullDown()
     }

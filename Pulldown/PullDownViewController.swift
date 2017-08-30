@@ -12,7 +12,7 @@ import UIKit
 
 protocol PullDownDelegate {
     
-    func selectedMenuDidUpdate(name: String)
+    func selectedMenuDidUpdate(_ name: String)
 }
 
 
@@ -22,7 +22,7 @@ class PullDownViewController : UIViewController {
         static let data = [ "Apples","Oranges", "Bananas" ]
     }
 
-    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet fileprivate weak var tableView: UITableView!
     
     var delegate : PullDownDelegate?
 
@@ -32,7 +32,7 @@ class PullDownViewController : UIViewController {
         tableView.delegate = self
 
         //show last separator
-        tableView.tableFooterView = UIView.init(frame: CGRectZero)
+        tableView.tableFooterView = UIView.init(frame: CGRect.zero)
 
     }
     
@@ -41,19 +41,19 @@ class PullDownViewController : UIViewController {
 
 extension PullDownViewController : UITableViewDataSource, UITableViewDelegate {
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("MenuCell", forIndexPath: indexPath) as! MenuCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MenuCell", for: indexPath) as! MenuCell
         
-        cell.menuTitle?.text = properties.data[indexPath.row].uppercaseString
+        cell.menuTitle?.text = properties.data[indexPath.row].uppercased()
         return cell
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return properties.data.count
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         if let delegate = self.delegate {
             delegate.selectedMenuDidUpdate(properties.data[indexPath.row])
@@ -63,43 +63,4 @@ extension PullDownViewController : UITableViewDataSource, UITableViewDelegate {
     }
 
 }
-
-class MenuCell: UITableViewCell {
-    
-    @IBOutlet weak var menuTitle: UILabel!
-    
-    let colorPurple = UIColor(red: 97.0/255.0, green: 10.0/255.0, blue: 153.0/255.0, alpha: 1.0)
-
-    
-    override func awakeFromNib() {
-        self.separatorInset = UIEdgeInsetsZero
-        self.layoutMargins = UIEdgeInsetsZero
-        
-        let blurEffect = UIBlurEffect(style: .Light)
-        let blurView = UIVisualEffectView.init(effect: blurEffect)
-        
-        blurView.backgroundColor = colorPurple
-        blurView.clipsToBounds = true
-        
-        let vibrancyEffect = UIVibrancyEffect(forBlurEffect: blurEffect)
-        let vibrancyView = UIVisualEffectView(effect: vibrancyEffect)
-        
-        blurView.addSubview(vibrancyView)
-        self.selectedBackgroundView = blurView
-        
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if selected{
-            self.menuTitle.textColor = UIColor.whiteColor()
-       
-        }
-        else {
-            self.menuTitle.textColor = colorPurple
-        }
-        
-    }
-}
-
 

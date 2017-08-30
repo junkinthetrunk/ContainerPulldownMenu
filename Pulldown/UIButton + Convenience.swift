@@ -12,11 +12,11 @@ extension UIButton {
     
     /// Makes the ``imageView`` appear just to the right of the ``titleLabel``.
     func alignImageRight() {
-        if let titleLabel = self.titleLabel, imageView = self.imageView {
+        if let titleLabel = self.titleLabel, let imageView = self.imageView {
             // Force the label and image to resize.
             titleLabel.sizeToFit()
             imageView.sizeToFit()
-            imageView.contentMode = .ScaleAspectFill
+            imageView.contentMode = .scaleAspectFill
             
             // Set the insets so that the title appears to the left and the image appears to the right.
             // Make the image appear slightly off the top/bottom edges of the button.
